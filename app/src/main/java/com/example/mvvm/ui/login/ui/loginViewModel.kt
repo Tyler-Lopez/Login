@@ -1,11 +1,14 @@
 package com.example.mvvm.ui.login.ui
 
 import android.util.Patterns
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
     private val _email = MutableStateFlow("") // crea un flujo mutable
@@ -29,15 +32,14 @@ class LoginViewModel : ViewModel() {
 
     }
 
+    @VisibleForTesting fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    @VisibleForTesting fun isValidPassword(password: String): Boolean = password.length > 6
 
-    fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    fun isValidPassword(password: String): Boolean = password.length > 6
-
-    suspend fun pressButton() {
-        _loading.value = true
-        delay(4000)
-        _loading.value = false
+    fun pressButton() {
+        viewModelScope.launch {
+            _loading.value = true
+            delay(4000)
+            _loading.value = false
+        }
     }
-
-
 }

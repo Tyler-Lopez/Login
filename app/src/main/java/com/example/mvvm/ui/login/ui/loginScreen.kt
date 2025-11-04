@@ -60,7 +60,6 @@ fun Login(
     val password by viewModel.password.collectAsStateWithLifecycle()
     val enabled by viewModel.enabled.collectAsStateWithLifecycle()
     val loading by viewModel.loading.collectAsStateWithLifecycle()
-    val coroutine = rememberCoroutineScope()
 
     if (loading) {
         Box(Modifier.fillMaxSize()) {
@@ -78,11 +77,8 @@ fun Login(
             Spacer(modifier = Modifier.padding((8.dp)))
             ForgotPassword(Modifier.align(Alignment.End)) // column organiza a lo que hay debajo, la propiedad align() de los hijos de una Column espera un Alignment.Horizontal, no un Alignment completo (que es bidimensional).
             Spacer(modifier = Modifier.padding((16.dp)))
-            LoginButton(enabled ) {
-                coroutine.launch {
-                    viewModel.pressButton()
-
-                }
+            LoginButton(enabled) {
+                viewModel.pressButton()
             }
         }
 
