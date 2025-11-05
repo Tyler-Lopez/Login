@@ -16,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -76,7 +77,12 @@ fun Login(
             Spacer(modifier = Modifier.height(8.dp))
             Password(password) { viewModel.onLoginChanged(email, it) }
             Spacer(modifier = Modifier.padding((8.dp)))
-            ForgotPassword(Modifier.align(Alignment.End)) // column organiza a lo que hay debajo, la propiedad align() de los hijos de una Column espera un Alignment.Horizontal, no un Alignment completo (que es bidimensional).
+            ForgotPassword(
+                modifier = Modifier.align(Alignment.End),
+                onClick = {
+                    viewModel.onClickedForgotPassword()
+                }
+            ) // column organiza a lo que hay debajo, la propiedad align() de los hijos de una Column espera un Alignment.Horizontal, no un Alignment completo (que es bidimensional).
             Spacer(modifier = Modifier.padding((16.dp)))
             LoginButton(enabled ) {
                 coroutine.launch {
@@ -92,18 +98,23 @@ fun Login(
 }
 
 @Composable
-fun ForgotPassword(modifier: Modifier) {
-    Text(
-        text = "olvidaste la contraseña?",
-        modifier = modifier.clickable {},
-        fontSize = 12.sp,
-        fontWeight = FontWeight.Bold, //Negritas
-        color = Color(
-            0xFF0A70C0
-        ),
-
-        )
-
+fun ForgotPassword(
+    modifier: Modifier,
+    onClick: () -> Unit,
+) {
+    TextButton(
+        modifier = modifier,
+        onClick = onClick,
+    ) {
+        Text(
+            text = "olvidaste la contraseña?",
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold, //Negritas
+            color = Color(
+                0xFF0A70C0
+            ),
+            )
+    }
 }
 
 @Composable

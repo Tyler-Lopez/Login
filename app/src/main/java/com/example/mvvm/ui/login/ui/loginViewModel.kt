@@ -2,12 +2,20 @@ package com.example.mvvm.ui.login.ui
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
+    private val _destinations = Channel<LoginDestination>(Channel.BUFFERED)
+    val destinations = _destinations.receiveAsFlow()
+
     private val _email = MutableStateFlow("") // crea un flujo mutable
     val email = _email.asStateFlow() //inmutable creamos ese puente para que la UI pueda verlo
     private val _password = MutableStateFlow("")
@@ -16,6 +24,12 @@ class LoginViewModel : ViewModel() {
     val enabled = _enabled.asStateFlow()
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
+
+    fun onClickedForgotPassword() {
+        viewModelScope.launch {
+            _destinations.send(element = LoginDestination.ForgotPassword)
+        }
+    }
 
     fun onLoginChanged(
         newEmail: String,
